@@ -1,0 +1,7 @@
+﻿# Company tracker preview
+
+Created with the built-in imagegen tool from the user-provided screenshot. This is a privacy-edited illustrative preview; the original screenshot is not included in the site assets. Inventory figures, account identifiers, chart data, and record contents were obscured in the raster image itself. The generated image was visually reviewed before integration.
+
+## Edit prompt
+
+Use case: precise-object-edit. Edit target: the most recent attached company equipment tracker screenshot, a wide green-and-white dashboard. Create a privacy-sanitized portfolio preview of this exact interface, retaining its layout, proportions, sidebar, four metric cards, panel borders, controls and green palette. Permanently replace all confidential values with broad opaque pale gray placeholder bars with soft blurred edges: every numeric metric, chart center total, counts, percentages, inventory count badges, signed-in person's name and username and avatar initial. Replace chart segments with an indistinct softly blurred generic ring so no true proportions remain. Obscure any record contents at the bottom. Keep generic UI labels such as Stock by status, View logs, Refresh data, Import Excel, Add Y-jack readable. Do not reproduce any original numbers or account identifiers anywhere. Preserve full wide screenshot composition. Output only the sanitized screenshot, no extra frame, no annotation or watermark.

@@ -3,6 +3,7 @@ import { BsStars } from 'react-icons/bs';
 import heroPreview from '../assets/images/sample2.png';
 import heroImage from '../assets/images/bg2.jpg';
 import ticketPreview from '../assets/images/sample.png';
+import companyTrackerPreview from '../assets/images/company-tracker-sanitized.png';
 
 export const hero = {
   eyebrow: 'IT Full Stack Developer',
@@ -48,6 +49,16 @@ export const experience = [
 ];
 
 export const projects = [
+  {
+    title: 'Company Equipment Tracker',
+    category: 'Internal Tools',
+    image: companyTrackerPreview,
+    imageAlt: 'Privacy-edited equipment tracker preview with inventory figures and account details obscured',
+    featured: true,
+    detail:
+      'An internal equipment tracker I developed to organize company inventory, monitor stock by status, and keep equipment records in one place. The dashboard brings together inventory summaries, status breakdowns, activity logs, and Excel imports.',
+    tech: ['Inventory Management', 'Status Tracking', 'Dashboard UI'],
+  },
   {
     title: 'Ticket Dashboard',
     category: 'IT Tools',
