@@ -1,8 +1,8 @@
 import { AiOutlineCode, AiOutlineTool } from 'react-icons/ai';
 import { BsStars } from 'react-icons/bs';
-import heroPreview from '../assets/images/sample2.png';
+import heroPreview from '../assets/images/hero-tracker-sanitized.png';
 import heroImage from '../assets/images/bg2.jpg';
-import ticketPreview from '../assets/images/sample.png';
+import ticketPreview from '../assets/images/ticket-dashboard-sanitized.png';
 import companyTrackerPreview from '../assets/images/company-tracker-sanitized.png';
 
 export const hero = {
@@ -63,6 +63,7 @@ export const projects = [
     title: 'Ticket Dashboard',
     category: 'IT Tools',
     image: ticketPreview,
+    imageAlt: 'Ticket Dashboard preview with names, ticket details, and performance figures obscured',
     detail:
       'A helpdesk analytics dashboard that visualizes ticket activity, category distribution, active tickets, resolver rankings, and resolution performance using charts and summary cards.',
     tech: ['React', 'CSS', 'Responsive Design'],
@@ -71,6 +72,7 @@ export const projects = [
     title: 'Hero Tracker',
     category: 'HR Tools',
     image: heroPreview,
+    imageAlt: 'Hero Tracker preview with employee records, totals, and account details obscured',
     detail:
       'A web-based HR tracking dashboard for managing employee history records, including sanctions, suspensions, long leaves, AWOL cases, separations, exit interviews, and case reviews.',
     tech: ['React', 'API Data', 'Dashboard UI'],

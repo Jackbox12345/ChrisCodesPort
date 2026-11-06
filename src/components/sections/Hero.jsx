@@ -1,5 +1,6 @@
 ﻿import { FiArrowDown, FiArrowDownRight, FiArrowUpRight } from 'react-icons/fi';
 import { hero } from '../../data/portfolioData';
+import Galaxy from '../Galaxy';
 
 export default function Hero() {
   return (
@@ -25,12 +26,7 @@ export default function Hero() {
               <a className="hero-contact" href="#contact">Let's talk <FiArrowUpRight aria-hidden="true" /></a>
             </div>
           </div>
-          <div className="galaxy-scene hero-enter" aria-hidden="true">
-            <div className="galaxy-halo" />
-            <div className="galaxy-disc"><div className="galaxy-arms" /><div className="galaxy-core" /></div>
-            <div className="galaxy-orbit" />
-            <span className="galaxy-coordinate">A UNIVERSE OF POSSIBILITIES</span>
-          </div>
+          <Galaxy />
         </div>
         <div className="hero-foot hero-enter">
           <span>DESIGN-MINDED. DETAIL-DRIVEN.</span>

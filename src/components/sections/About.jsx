@@ -57,6 +57,15 @@ export default function About() {
 
   return (
     <section id="about" className="about-section section-space">
+      <div className="about-cosmos" aria-hidden="true">
+        <span className="celestial-ringed"><span /></span>
+        <span className="celestial-moon" />
+        <span className="celestial-blue" />
+        <span className="celestial-cluster" />
+        <span className="celestial-sun celestial-sun-gold" />
+        <span className="celestial-sun celestial-sun-blue" />
+        <span className="celestial-sun celestial-sun-distant" />
+      </div>
       <div className="wrap about-layout">
         <div data-animate>
           <p className="eyebrow">02 / Behind the code</p>

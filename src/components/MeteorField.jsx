@@ -33,6 +33,9 @@ export default function MeteorField() {
     let lastTime = 0;
     let active = false;
     let target = null;
+    const galaxy = document.querySelector('.galaxy-scene');
+    const galaxyDisc = galaxy?.querySelector('.galaxy-disc');
+    let coreGlow = 0;
     const pointer = { x: width / 2, y: height / 2 };
     const particles = Array.from({ length: PARTICLE_COUNT }, (_, index) => ({
       x: Math.random() * width,
@@ -42,6 +45,8 @@ export default function MeteorField() {
       spread: Math.random(),
       speed: 3 + Math.random() * 5,
       size: 0.45 + Math.random() * 0.65,
+      orbit: null,
+      captureAfter: 0,
     }));
     // Cache soft meteor sprites once instead of creating gradients every frame.
     const sprites = ['#bba5ff', '#8ce5ff', '#ffd0a0'].map(color => {
@@ -89,6 +94,16 @@ export default function MeteorField() {
       const element = document.elementFromPoint(pointer.x, pointer.y);
       target = element?.closest('[data-meteor-ignore]') ? null : element?.closest(TARGETS);
     };
+    const respawn = (particle, seconds) => {
+      const drift = seconds * (35 + particle.spread * 45);
+      particle.x = -60;
+      particle.y = Math.random() * height;
+      const wrap = (value, span) => ((value % span) + span) % span;
+      particle.fraction = wrap(particle.x + 80 - drift, width + 160) / (width + 160);
+      particle.phase = wrap(particle.y + 80 - drift * 0.65, height + 160) / (height + 160) * Math.PI * 2;
+      particle.orbit = null;
+      particle.captureAfter = seconds + 8;
+    };
     const draw = time => {
       frame = 0;
       if (!active || !allowed.matches || document.hidden) return;
@@ -96,11 +111,52 @@ export default function MeteorField() {
       lastTime = time;
       const rect = target?.isConnected ? target.getBoundingClientRect() : null;
       const seconds = time / 1000;
+      // Use the rendered disc's transform so the gravity follows its tilt,
+      // responsive size, and position while the page scrolls.
+      let gravity = null;
+      if (galaxyDisc && galaxy.classList.contains('galaxy-running')) {
+        const bounds = galaxyDisc.getBoundingClientRect();
+        if (bounds.top < height && bounds.bottom > 0) {
+          const matrix = new DOMMatrixReadOnly(getComputedStyle(galaxyDisc).transform);
+          gravity = {
+            x: bounds.left + bounds.width / 2,
+            y: bounds.top + bounds.height / 2,
+            radius: Math.min(galaxyDisc.offsetWidth, galaxyDisc.offsetHeight) * 0.48,
+            matrix,
+            inverse: matrix.inverse(),
+          };
+        }
+      }
+      let captured = particles.filter(particle => particle.orbit).length;
       clear();
       particles.forEach((particle, index) => {
         let x;
         let y;
-        if (rect) {
+        let fade = 1;
+        if (particle.orbit && !gravity) respawn(particle, seconds);
+        if (gravity && !rect && !particle.orbit && index % 7 === 0 && captured < 6 && seconds > particle.captureAfter) {
+          const local = gravity.inverse.transformPoint({ x: particle.x - gravity.x, y: particle.y - gravity.y });
+          const radius = Math.hypot(local.x, local.y);
+          if (radius > gravity.radius * 0.35 && radius < gravity.radius * 1.1 && Math.random() < elapsed * 1.4) {
+            particle.orbit = { radius, angle: Math.atan2(local.y, local.x) };
+            captured += 1;
+          }
+        }
+        if (particle.orbit && gravity) {
+          const orbit = particle.orbit;
+          orbit.radius *= Math.exp(-0.58 * elapsed);
+          // Match the galaxy's counterclockwise rotation and accelerate inward.
+          orbit.angle -= elapsed * (0.75 + 1.8 * (1 - Math.min(orbit.radius / gravity.radius, 1)));
+          const position = gravity.matrix.transformPoint({ x: Math.cos(orbit.angle) * orbit.radius, y: Math.sin(orbit.angle) * orbit.radius });
+          x = gravity.x + position.x;
+          y = gravity.y + position.y;
+          fade = Math.min(1, orbit.radius / 24);
+          if (orbit.radius < 5) {
+            coreGlow = Math.min(1, coreGlow + 0.6);
+            respawn(particle, seconds);
+            return;
+          }
+        } else if (rect) {
           // Stable ordering avoids crossing the content as the border circulates.
           const fraction = (particle.fraction + seconds * 0.012) % 1;
           const offset = (particle.spread - 0.5) * 15 + Math.sin(seconds * 2 + particle.phase) * 3;
@@ -115,21 +171,28 @@ export default function MeteorField() {
             particle.y = y;
           }
         }
-        const ease = 1 - Math.exp(-particle.speed * elapsed);
+        const ease = particle.orbit ? 1 : 1 - Math.exp(-particle.speed * elapsed);
         const dx = (x - particle.x) * ease;
         const dy = (y - particle.y) * ease;
         particle.x += dx;
         particle.y += dy;
         if (particle.x < -80 || particle.x > width + 80 || particle.y < -80 || particle.y > height + 80) return;
         const angle = Math.hypot(dx, dy) > 0.05 ? Math.atan2(dy, dx) : 0.58;
-        const size = particle.size * (rect ? 0.65 : 1);
+        const size = particle.size * (particle.orbit ? 0.85 * Math.max(0.25, fade) : rect ? 0.65 : 1);
         context.save();
         context.translate(particle.x, particle.y);
         context.rotate(angle);
-        context.globalAlpha = rect ? 0.85 : 0.55;
+        context.globalAlpha = particle.orbit ? fade * 0.95 : rect ? 0.85 : 0.55;
         context.drawImage(sprites[index % sprites.length], -40 * size, -6 * size, 48 * size, 12 * size);
         context.restore();
       });
+      coreGlow = Math.max(0, coreGlow - elapsed * 1.5);
+      if (gravity && coreGlow > 0) {
+        context.save();
+        context.globalAlpha = coreGlow * 0.5;
+        context.drawImage(sprites[2], 69, 1, 23, 23, gravity.x - 28, gravity.y - 28, 56, 56);
+        context.restore();
+      }
       frame = requestAnimationFrame(draw);
     };
     const move = event => {
