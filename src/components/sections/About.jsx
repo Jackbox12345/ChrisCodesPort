@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { skills, stats } from '../../data/portfolioData';
 
 const introduction = 'I’m Christian, a programmer who turns rough ideas into interfaces people understand.';

@@ -1,4 +1,4 @@
-﻿import { FiArrowUpRight } from 'react-icons/fi';
+import { FiArrowUpRight } from 'react-icons/fi';
 import { projects } from '../../data/portfolioData';
 
 export default function Projects() {
@@ -47,7 +47,7 @@ export default function Projects() {
       </div>
       <div className="projects-outro" data-animate>
         <p>Have a workflow that could work better?</p>
-        <a href="#contact">Let's build your next tool <FiArrowUpRight aria-hidden="true" /></a>
+        <a href="#contact">Let’s build your next tool <FiArrowUpRight aria-hidden="true" /></a>
       </div>
     </section>
   );

@@ -29,6 +29,11 @@ export const skills = [
   'Git',
   'API Integration',
   'Responsive UI',
+  'Microsoft SQL Server',
+  'MySQL',
+  'Firebase',
+  'Supabase',
+  'Codex',
 ];
 
 export const experience = [
